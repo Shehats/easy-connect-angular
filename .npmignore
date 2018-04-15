@@ -1,5 +1,7 @@
-node_modules
-dist
 *.lock
 *-lock.json
 AuthTest
+tsconfig.json
+src
+node_modules
+
