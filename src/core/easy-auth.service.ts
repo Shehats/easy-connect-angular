@@ -1,14 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
-import { IAuth, 
+import { IAuth,
+         AuthType,
          EasyTokenAuth, 
          EasyAuth,
          IConfig } from 'easy-connect';
+import { Easily } from 'easy-injectionjs'
 import { Observable } from 'rxjs/Rx';
-
-export enum AuthType {
-  TOKEN_AUTH,
-  SESSION_AUTH
-}
 
 @Injectable()
 export class EasyAuthService implements IAuth {
@@ -18,6 +15,8 @@ export class EasyAuthService implements IAuth {
     @Inject('AUTH_CONFIG') private config : IConfig,
     @Inject('AUTH_TYPE') private authType: AuthType
     ) {
+    Easily('CONFIG', config)
+    Easily('AUTH_TYPE', authType)
     this.auth = (authType == AuthType.TOKEN_AUTH)
     ? new EasyTokenAuth(config): new EasyAuth(config);
   }
@@ -34,7 +33,11 @@ export class EasyAuthService implements IAuth {
     return this.auth.register(registerParams);
   }
 
-  public validate() {
+  public validate (): Observable<any> {
     return this.auth.validate();
+  }
+
+  public validateData (data: Object): Observable<any> {
+    return this.auth.validateData(data);
   }
 }
